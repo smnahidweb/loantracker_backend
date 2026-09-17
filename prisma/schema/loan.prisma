@@ -1,0 +1,45 @@
+enum LoanStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ACTIVE
+  COMPLETED
+  DEFAULTED
+}
+
+enum PaymentType {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+model Loan {
+  id                String        @id @default(cuid())
+  accountNumber     String        @unique
+  
+  principalAmount   Float         
+  interestRate      Float         
+  totalAmount       Float         
+  installmentAmount Float         
+  totalInstallments Int           // মোট কতটি কিস্তি (e.g., 20)
+  paidInstallments  Int           @default(0) 
+  
+  paymentType       PaymentType   @default(DAILY)
+  status            LoanStatus    @default(PENDING)
+  
+  startDate         DateTime?
+  endDate           DateTime?
+
+  customerId        String
+  customer          Customer      @relation(fields: [customerId], references: [id], onDelete: Cascade)
+
+  createdById       String        
+  approvedById      String?       
+
+  repayments        Repayment[]
+
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@map("loan")
+}

@@ -1,0 +1,30 @@
+enum PaymentMethod {
+  CASH
+  BANK_TRANSFER
+  MOBILE_BANKING
+}
+
+model Repayment {
+  id              String        @id @default(cuid())
+  receiptNo       String        @unique // e.g., REC-10023
+  
+  installmentNo   Int           
+  
+  amount          Float         
+  penaltyAmount   Float         @default(0) 
+  totalPaid       Float        
+  
+  paymentDate     DateTime      @default(now())
+  paymentMethod   PaymentMethod @default(CASH)
+  notes           String?       
+
+  loanId          String
+  loan            Loan          @relation(fields: [loanId], references: [id], onDelete: Cascade)
+
+  collectedById   String        
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@map("repayment")
+}
