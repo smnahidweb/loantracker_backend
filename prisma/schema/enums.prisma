@@ -1,0 +1,26 @@
+enum Role{
+    ADMIN
+    MANAGER
+    USER
+}
+
+enum UserStatus {
+    ACTIVE
+    INACTIVE
+    SUSPENDED
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  ACTIVE
+  COMPLETED
+  DEFAULTED
+}
+
+enum PaymentType {
+  DAILY
+  WEEKLY
+  MONTHLY
+}

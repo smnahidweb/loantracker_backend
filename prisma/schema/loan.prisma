@@ -1,17 +1,3 @@
-enum LoanStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  ACTIVE
-  COMPLETED
-  DEFAULTED
-}
-
-enum PaymentType {
-  DAILY
-  WEEKLY
-  MONTHLY
-}
 
 model Loan {
   id                String        @id @default(cuid())
