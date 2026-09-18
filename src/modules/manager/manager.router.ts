@@ -7,7 +7,10 @@ const router = Router();
 router.get("/pending-staffs", managerController.getPendingStaffs);
 
 // Assign Manager Role Route
-router.patch("/assign-manager", managerController.assignManagerRole);
+router.patch("/assign-manager/:userId/role", managerController.assignManagerRole);
+
+// demote a manager to staff route
+router.patch("/demote-manager/:userId/role", managerController.demoteManager);
 
 // Get All Active Managers Route
 router.get("/managers", managerController.getAllManagers);

@@ -19,32 +19,23 @@ const getPendingStaffs = async (req: Request, res: Response) => {
 
 
 
-const assignManagerRole = async (req: Request, res: Response) => {
+export const assignManagerRole = async (req: Request, res: Response) => {
   try {
-    const { userId, branch, employeeId } = req.body;
+    const { userId } = req.params;
+    const { role, branch } = req.body;
 
-    if (!userId || !branch) {
-      return res.status(400).json({
-        success: false,
-        message: "User ID and Branch are required",
-      });
-    }
-
-    const manager = await managerService.assignManagerRole({
-      userId,
-      branch,
-      employeeId,
-    });
+    
+    const updatedUser = await managerService.assignManagerRole(userId as string,{role,branch});
 
     return res.status(200).json({
       success: true,
-      message: "Staff promoted to Manager successfully",
-      data: manager,
+      message: "ম্যানেজার হিসেবে সফলভাবে রোল আপডেট করা হয়েছে",
+      data: updatedUser,
     });
   } catch (error: any) {
     return res.status(400).json({
       success: false,
-      message: error.message || "Failed to assign manager role",
+      message: error.message || "রোল আপডেট করতে সমস্যা হয়েছে",
     });
   }
 };
@@ -67,8 +58,42 @@ const getAllManagers = async (req: Request, res: Response) => {
   }
 };
 
+
+// demoteManager
+
+const demoteManager = async (req:Request,res:Response)=>{
+
+
+  try{
+
+    const {userId} = req.params;
+
+    const result = await managerService.demoteManager(userId as string);
+
+    return res.status(200).json({
+      success:true,
+      message:"ম্যানেজারকে সফলভাবে ডিমোট করা হয়েছে",
+      data:result
+    })
+
+  }
+
+  catch(error:any){
+    return res.status(500).json({
+      success:false,
+      message: error.message ||  "Failed to demoteManager" 
+    })
+  }
+
+
+  
+
+}
+
+
 export const managerController = {
   getPendingStaffs,
   assignManagerRole,
   getAllManagers,
+  demoteManager
 };

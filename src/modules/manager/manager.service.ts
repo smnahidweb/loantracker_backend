@@ -3,9 +3,9 @@ import { Role, UserStatus } from "../../../prisma/schema/generated/prisma/browse
 import { prisma } from "../../lib/prisma";
 
 interface IAssignManagerPayload {
-  userId: string;
+  role: string;
   branch: string;
-  employeeId?: string;
+
 }
 
 // pending staff list
@@ -27,39 +27,34 @@ const getPendingStaffs = async () => {
 };
 
 // ২.update a staff user to manager role
-const assignManagerRole = async (payload: IAssignManagerPayload) => {
-  const { userId, branch, employeeId } = payload;
-
-  const existingUser = await prisma.user.findUnique({
+const assignManagerRole = async (userId: string, payload: IAssignManagerPayload) => {
+  const user = await prisma.user.findUnique({
     where: { id: userId },
   });
 
-  if (!existingUser) {
-    throw new Error("Staff user not found");
+  if (!user) {
+    throw new Error("ইউজার পাওয়া যায়নি");
   }
 
-  const updatedManager = await prisma.user.update({
+  const updatedUser = await prisma.user.update({
     where: { id: userId },
     data: {
-      role: Role.MANAGER,
-      status: UserStatus.ACTIVE,
-      branch,
-      ...(employeeId && { employeeId }),
+      role: payload.role, // "MANAGER"
+      branch: payload.branch,
     },
     select: {
       id: true,
       name: true,
       email: true,
       role: true,
-      status: true,
       branch: true,
-      employeeId: true,
-      updatedAt: true,
+      createdAt: true,
     },
   });
 
-  return updatedManager;
+  return updatedUser;
 };
+
 
 // ৩. get all managers
 const getAllManagers = async () => {
@@ -81,8 +76,39 @@ const getAllManagers = async () => {
   });
 };
 
+// demoteManager 
+
+const demoteManager = async (userId:string)=>{
+
+  const isExistManager = await prisma.user.findUnique({
+     where:{
+      id:userId
+     }
+  })
+
+  if(!isExistManager){
+    throw new Error("ম্যানেজার পাওয়া যায়নি")
+  }
+
+
+  const result = await prisma.user.update({
+    where:{
+      id: userId
+    },
+    data:{
+      role:"USER",
+      branch:null
+    }
+  })
+
+  return result
+
+}
+
+
 export const managerService = {
   getPendingStaffs,
   assignManagerRole,
   getAllManagers,
+  demoteManager
 };
