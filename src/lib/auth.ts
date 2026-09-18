@@ -37,7 +37,32 @@ export const auth = betterAuth({
         type: "string",
         required: false,
       },
-    }
-  }
+      nid: {
+        type: "string",
+        required: false,
+        defaultValue: null,
+    },
+    education: {
+        type: "string",
+        required: false,
+        defaultValue: null,
 
+    },
+    address: {
+        type: "string",
+        required: false,
+        defaultValue: null,
+    },
+    designation: {
+        type: "string",
+        required: false,
+        defaultValue: null,
+    },
+    joiningDate: {
+        type: "date",
+        required: false,
+        defaultValue: null,
+    },
+  },
+  },
 });

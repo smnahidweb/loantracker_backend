@@ -8,6 +8,17 @@ interface IAssignManagerPayload {
 
 }
 
+interface UpdateManagerDetailPayload {
+  name?: string;
+  phone?: string;
+  branch?: string;
+  employeeId?: string;
+  nid?: string;
+  education?: string;
+  address?: string;
+  designation?: string;
+}
+
 // pending staff list
 const getPendingStaffs = async () => {
   return await prisma.user.findMany({
@@ -105,10 +116,87 @@ const demoteManager = async (userId:string)=>{
 
 }
 
+// updateManagerDetails
+
+const updateManagerDetails = async (userId:string,payload:UpdateManagerDetailPayload)=>{
+
+  const isExistManager = await prisma.user.findUnique({
+    where:{
+      id:userId
+    }
+  })
+
+  if(!isExistManager){
+    throw new Error("ম্যানেজার পাওয়া যায়নি")
+  }
+
+  const updatedUser = await prisma.user.update({
+    where:{
+      id: userId
+    },
+    data: {
+      name: payload.name,
+      phone: payload.phone,
+      branch: payload.branch,
+      employeeId: payload.employeeId,
+      nid: payload.nid,
+      education: payload.education,
+      address: payload.address,
+      designation: payload.designation,
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      role: true,
+      status: true,
+      employeeId: true,
+      branch: true,
+      nid: true,
+      education: true,
+      address: true,
+      designation: true,
+    },
+  })
+
+  return updatedUser
+}
+
+// get specific manager profile by userId
+
+const getManagerProfile = async (userId: string) => {
+  const manager = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      phone: true,
+      role: true,
+      status: true,
+      employeeId: true,
+      branch: true,
+      nid: true,
+      education: true,
+      address: true,
+      designation: true,
+      createdAt: true,
+    },
+  });
+
+  if (!manager) {
+    throw new Error("ম্যানেজারের প্রোফাইল পাওয়া যায়নি");
+  }
+
+  return manager;
+};
 
 export const managerService = {
   getPendingStaffs,
   assignManagerRole,
   getAllManagers,
-  demoteManager
+  getManagerProfile,
+  demoteManager,
+  updateManagerDetails
 };

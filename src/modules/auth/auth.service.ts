@@ -63,7 +63,6 @@ const loginUser = async (payload: ILoginUserPayload) => {
   if (data.user.status === UserStatus.INACTIVE || data.user.status === UserStatus.SUSPENDED) {
     throw new Error("Your account is currently inactive or suspended. Please contact admin.");
   }
-
   return data;
 };
 

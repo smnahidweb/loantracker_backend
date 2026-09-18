@@ -992,7 +992,12 @@ export const UserScalarFieldEnum = {
   status: 'status',
   phone: 'phone',
   employeeId: 'employeeId',
-  branch: 'branch'
+  branch: 'branch',
+  nid: 'nid',
+  education: 'education',
+  address: 'address',
+  designation: 'designation',
+  joiningDate: 'joiningDate'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]

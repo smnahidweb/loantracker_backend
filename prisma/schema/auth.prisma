@@ -16,6 +16,12 @@ model User {
   employeeId String?
   branch  String?
 
+  nid                 String?  @unique
+  education           String?  // যেমন: BSC in CSE, Honours, HSC
+  address             String?  
+  designation         String?  // যেমন: Senior Manager, Accounts Manager
+  joiningDate         DateTime?
+
   @@unique([email])
   @@map("user")
 }
